@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from octofit_tracker.api_urls import api_root
 
 urlpatterns = [
+    path('', api_root, name='api-root'),
     path('admin/', admin.site.urls),
     path('api/', include('octofit_tracker.api_urls')),
 ]

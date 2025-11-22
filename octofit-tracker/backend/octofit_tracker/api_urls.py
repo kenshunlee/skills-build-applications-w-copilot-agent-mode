@@ -1,30 +1,8 @@
 from rest_framework import generics, serializers
 from django.contrib.auth import get_user_model
-from djongo import models
+from .models import Team, Activity, Leaderboard, Workout
 from django.urls import path
 
-class Team(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    class Meta:
-        app_label = 'octofit_tracker'
-
-class Activity(models.Model):
-    name = models.CharField(max_length=100)
-    user = models.CharField(max_length=100)
-    class Meta:
-        app_label = 'octofit_tracker'
-
-class Leaderboard(models.Model):
-    team = models.CharField(max_length=100)
-    points = models.IntegerField()
-    class Meta:
-        app_label = 'octofit_tracker'
-
-class Workout(models.Model):
-    name = models.CharField(max_length=100)
-    difficulty = models.CharField(max_length=50)
-    class Meta:
-        app_label = 'octofit_tracker'
 
 User = get_user_model()
 
@@ -84,7 +62,6 @@ def api_root(request):
     if codespace_name:
         base_url = f"https://{codespace_name}-8000.app.github.dev/api/"
     else:
-        # fallback to request host (localhost or other)
         scheme = 'https' if request.is_secure() else 'http'
         base_url = f"{scheme}://{request.get_host()}/api/"
     return Response({

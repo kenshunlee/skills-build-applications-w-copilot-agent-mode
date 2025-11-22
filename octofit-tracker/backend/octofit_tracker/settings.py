@@ -1,3 +1,5 @@
+# 自定义用户模型
+AUTH_USER_MODEL = 'octofit_tracker.User'
 """
 Django settings for octofit_tracker project.
 
@@ -32,6 +34,8 @@ codespace_host = f"{CODESPACE_NAME}-8000.app.github.dev" if CODESPACE_NAME else 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 if codespace_host:
     ALLOWED_HOSTS.append(codespace_host)
+    # 支持 https://$CODESPACE_NAME-8000.app.github.dev
+    ALLOWED_HOSTS.append(f"{CODESPACE_NAME}-8000.app.github.dev")
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
