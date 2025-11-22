@@ -25,7 +25,51 @@ SECRET_KEY = 'django-insecure-)f*qy%!t@i)*j5zx67d1)&^a*n)rw#@!snli)-bt65yk*4&rhw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+import os
+CODESPACE_NAME = os.environ.get('CODESPACE_NAME')
+codespace_host = f"{CODESPACE_NAME}-8000.app.github.dev" if CODESPACE_NAME else None
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+if codespace_host:
+    ALLOWED_HOSTS.append(codespace_host)
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'djongo',
+    'octofit_tracker',
+    'corsheaders',
+]
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+# CORS settings for Codespace frontend access
+CORS_ALLOWED_ORIGINS = []
+if codespace_host:
+    CORS_ALLOWED_ORIGINS.append(f"https://{codespace_host}")
+CORS_ALLOWED_ORIGINS += [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+CSRF_TRUSTED_ORIGINS = [
+    f"https://{codespace_host}" if codespace_host else '',
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+CSRF_TRUSTED_ORIGINS = [x for x in CSRF_TRUSTED_ORIGINS if x]
 
 
 # Application definition

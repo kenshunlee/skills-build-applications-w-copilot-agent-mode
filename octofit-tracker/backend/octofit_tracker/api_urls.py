@@ -73,26 +73,33 @@ class WorkoutList(generics.ListAPIView):
     queryset = Workout.objects.all()
     serializer_class = WorkoutSerializer
 
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
+
+import os
+@api_view(['GET'])
+def api_root(request):
+    codespace_name = os.environ.get('CODESPACE_NAME')
+    if codespace_name:
+        base_url = f"https://{codespace_name}-8000.app.github.dev/api/"
+    else:
+        # fallback to request host (localhost or other)
+        scheme = 'https' if request.is_secure() else 'http'
+        base_url = f"{scheme}://{request.get_host()}/api/"
+    return Response({
+        'users': base_url + 'users/',
+        'teams': base_url + 'teams/',
+        'activities': base_url + 'activities/',
+        'leaderboard': base_url + 'leaderboard/',
+        'workouts': base_url + 'workouts/',
+    })
+
 urlpatterns = [
-    from rest_framework.response import Response
-    from rest_framework.decorators import api_view
-
-    @api_view(['GET'])
-    def api_root(request):
-        return Response({
-            'users': '/api/users/',
-            'teams': '/api/teams/',
-            'activities': '/api/activities/',
-            'leaderboard': '/api/leaderboard/',
-            'workouts': '/api/workouts/',
-        })
-
-    urlpatterns = [
-        path('', api_root, name='api-root'),
-        path('users/', UserList.as_view()),
-        path('teams/', TeamList.as_view()),
-        path('activities/', ActivityList.as_view()),
-        path('leaderboard/', LeaderboardList.as_view()),
-        path('workouts/', WorkoutList.as_view()),
-    ]
+    path('', api_root, name='api-root'),
+    path('users/', UserList.as_view()),
+    path('teams/', TeamList.as_view()),
+    path('activities/', ActivityList.as_view()),
+    path('leaderboard/', LeaderboardList.as_view()),
+    path('workouts/', WorkoutList.as_view()),
 ]

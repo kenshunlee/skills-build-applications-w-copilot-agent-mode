@@ -2,19 +2,23 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch Django Backend",
+      "name": "Run Django Server",
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/octofit-tracker/backend/manage.py",
-      "args": ["runserver", "0.0.0.0:8000"],
+      "args": [
+        "runserver",
+        "0.0.0.0:8000"
+      ],
       "django": true,
-      "justMyCode": true,
-      "python": "${workspaceFolder}/octofit-tracker/backend/venv/bin/python",
+      "cwd": "${workspaceFolder}/octofit-tracker/backend",
       "env": {
+        "CODESPACE_NAME": "${localEnv:CODESPACE_NAME}",
         "PYTHONPATH": "${workspaceFolder}/octofit-tracker/backend/venv/bin/python",
         "VIRTUAL_ENV": "${workspaceFolder}/octofit-tracker/backend/venv",
         "PATH": "${workspaceFolder}/octofit-tracker/backend/venv/bin:${env:PATH}"
-      }
+      },
+      "console": "integratedTerminal"
     },
     {
       "name": "Launch React Frontend",
